@@ -22,7 +22,22 @@ a:hover{color:#003366}
     padding:12px;
     margin-top:15px;
 }
-
+.copy-btn{
+  margin-left:8px;
+  padding:2px 8px;
+  font-size:12px;
+  cursor:pointer;
+  border:1px solid #ccc;
+  border-radius:4px;
+  background:#f5f5f5;
+}
+.copy-btn:hover{
+  background:#e0e0e0;
+}
+.file-name{
+  cursor:pointer;
+}
+    
 /* ===== DASHBOARD TABS ===== */
 .tabs{
   display:flex;
@@ -496,11 +511,26 @@ Mã CQT: ${MCCQT}<br><br>
   html+=`<br>Không tồn tại mã tra cứu trong file XML`;
  }
 
- html+=`<br>Tên file: ${formatDate(NLap)} ${MSTNBan} ${KHMSHDon} ${KHHDon} ${SHDonV} ${TenNBanGoiNho}`;
+ html+=`<br>Tên file: <span class="file-name">${formatDate(NLap)} ${MSTNBan} ${KHMSHDon} ${KHHDon} ${SHDonV} ${TenNBanGoiNho}</span>
+  <button class="copy-btn" onclick="copyText(this)">Copy</button>`;
  html+=`</div>`;
  document.getElementById("result").innerHTML+=html;
 }
 
+function copyText(btn){
+  const text = btn.parentElement.querySelector('.file-name').innerText;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.innerText = "Đã copy";
+    setTimeout(()=>btn.innerText="Copy",1500);
+  });
+}
+
+document.addEventListener("click", e=>{
+  if(e.target.classList.contains("file-name")){
+    navigator.clipboard.writeText(e.target.innerText);
+  }
+});
+    
 /* ===DASHBOARD TAB ACTIVE=== */
 (function(){
   const tabs = document.querySelectorAll('.tab');
