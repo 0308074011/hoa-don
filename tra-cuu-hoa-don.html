@@ -178,8 +178,8 @@ else if (MSTTCGP === "VNPT_BACK" ||["0100684378","0108212803"].includes(MSTTCGP)
     add(`- `);add(`https://hoadon.petrolimex.com.vn/?strFkey=${MaTCHdon}`);add(`<br>`);
   } else {
     // VNPT thay đổi tên gợi nhớ
-    const sub = (typeof VNPT_SUBDOMAIN_MAP !== "undefined" && VNPT_SUBDOMAIN_MAP[MSTNBan])
-      ? VNPT_SUBDOMAIN_MAP[MSTNBan]
+    const sub = (typeof VNPT_SUBDOMAIN !== "undefined" && VNPT_SUBDOMAIN[MSTNBan])
+      ? VNPT_SUBDOMAIN[MSTNBan]
       : MSTNBan;
     add(`- Mã tra cứu: ${MCCQT}`);add(`<br>`);
     add(`- `);add(`https://${sub}-tt78.vnpt-invoice.com.vn?strFkey=${MCCQT}`);add(`<br>`);
