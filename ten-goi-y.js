@@ -511,6 +511,7 @@ const VNPT_SUBDOMAIN = {
 "0306387178":"congchungbenthanh",
 "0307979603":"cityauto",
 "0311028311":"vietceramics",
+"0312498510":"hkdhiepthanh",
 "0314071202":"vieclam24h",
 "0311770883":"pharmacity",
 "0315087043":"quanutut",
