@@ -233,7 +233,7 @@
 "4200240380-011":"XD Ninh Thuan",
 "4200240380-027":"XD Phu Khanh",
 "6000235027-017":"XD Dak Nong",
-"0300555450-001":"Thanh Vien",
+"0300555450-001":"XD Sai Gon",
 "0102385623-054":"MIC Long Bien",
 "0106869738-005":"Vien Thong HCM",
 "1200253539":"Chau Thanh",
