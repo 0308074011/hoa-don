@@ -158,9 +158,6 @@
 };
 
 const VNPT_SUBDOMAIN = {
-"0302309845":"dienmaycholon",
-"0302309845-001":"dienmaycholoncto",
-"0302309845-048":"dienmaycholonvtu",
 "0100109120-007":"vrcc8",
 "0100109120-029":"dangkiem5003v",
 "0100109120-030":"dangkiem5005v",
@@ -181,6 +178,9 @@ const VNPT_SUBDOMAIN = {
 "0300954529":"vttphcm",
 "0301427324":"kimlong",
 "0302309845":"dienmaycholon",
+"0302309845-001":"dienmaycholoncto",
+"0302309845-048":"dienmaycholonvtu",
+"0302309845-054":"dienmaycholonqni",
 "0302596283":"ctycptmdvcangio",
 "0303522206":"smcdt",
 "0305341389":"thienlonghoancau",
