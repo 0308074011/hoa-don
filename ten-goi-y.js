@@ -488,6 +488,7 @@
 };
 
 const VNPT_SUBDOMAIN = {
+"0100108102-009":"petrothietbihcm",
 "0100109120-007":"vrcc8",
 "0100109120-029":"dangkiem5003v",
 "0100109120-030":"dangkiem5005v",
