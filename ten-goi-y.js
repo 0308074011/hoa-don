@@ -1,4 +1,5 @@
 ﻿const TENNBANGOINHO = {
+"3700872097-002":"CN Thinh Phat Loc",
 "1102028824":"HLKT",
 "0317575247":"Huy Toan Phat",
 "0317717011":"Dolozi",
