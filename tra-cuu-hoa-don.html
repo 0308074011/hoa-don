@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Đọc và Tra cứu nhiều hóa đơn XML</title>
 <link rel="icon" href="trunglam.ico" type="image/x-icon">
-    
+
 <style>
 body{
     font-family: Tahoma, Arial, sans-serif;
@@ -38,7 +38,7 @@ a:hover{color:#003366}
 .file-name{
   cursor:pointer;
 }
-    
+ 
 /* ===== DASHBOARD TABS ===== */
 .tabs{
   display:flex;
@@ -71,7 +71,7 @@ a:hover{color:#003366}
 <body>
     
 <div class="tabs" id="dashboardTabs">
-  <a class="tab" data-tab="invoice" href="https://0308074011.github.io/hoa-don/index.html">Hóa đơn</a>
+  <a class="tab" data-tab="invoice" href="index.html">Hóa đơn</a>
   <a class="tab" data-tab="lookup" href="#">Tra cứu XML</a>
 </div>
     
@@ -81,6 +81,7 @@ a:hover{color:#003366}
 <div id="result"></div>
 
 <script src="ten-goi-y.js"></script>
+<script src="domainvnpt.js"></script>
 
 <script>
 const KEY_TTRUONG = [
@@ -528,6 +529,7 @@ document.addEventListener("click", e=>{
   }
 });
     
+
 /* ===DASHBOARD TAB ACTIVE=== */
 (function(){
   const tabs = document.querySelectorAll('.tab');
