@@ -95,66 +95,6 @@ const LINK_TTRUONG = [
  "DLink","ĐCTC","DCTC","DC TC","PortalLink","Website tra cứu HĐ"
 ];
 
-/* ===== TT32 SUPPORT ===== */
-// TT32 lấy text node đầu tiên theo danh sách tag
-function getFirst(xml, tags){
-  for(const t of tags){
-    const el = xml.getElementsByTagName(t)[0];
-    if(el && el.textContent){
-      const v = el.textContent.trim();
-      if(v) return v;
-    }
-  }
-  return "";
-}
-
-// lấy MST và tên người bán ưu tiên trong node người bán
-function getSellerInfoTT32(xml){
-  const sellerSelectors = [
-    "NBan",
-    "Seller",
-    "seller",
-    "inv:Seller"
-  ];
-  const MSTNBan_TT32 = [
-    "MST","NBMST","MaSoThueNguoiBan","ma_thue","MSTTinh","ComTaxCode","sellerTaxCode","inv:sellerTaxCode",
-    "Taxcode","SellerTaxCode"  ];
-  const TenNBan_TT32 = [
-    "Ten","TenNguoiBan","don_vi","tenDVi","ComName","sellerLegalName","inv:sellerLegalName","CompanyName","SellerName",
-    "inv:SellerName","CustomerName"  ];
-  let result = {
-    tax: "",
-    name: ""
-  };
-
-// ưu tiên lấy trong node người bán
-  for(const s of sellerSelectors){
-    const node = xml.getElementsByTagName(s)[0];
-    if(node){
-      // ===== MST NGƯỜI BÁN =====
-      if(!result.tax){
-        result.tax = getFirst(node.ownerDocument || xml, MSTNBan_TT32);
-      }
-      // ===== TÊN NGƯỜI BÁN =====
-      if(!result.name){
-        result.name = getFirst(node.ownerDocument || xml, TenNBan_TT32);
-      }
-    }
-    if(result.tax && result.name) break;
-  }
-// fallback toàn file nếu thiếu
-  if(!result.tax){
-    result.tax = getFirst(xml, MSTNBan_TT32);
-  }
-  if(!result.name){
-    result.name = getFirst(xml, TenNBan_TT32);
-  }
-  return result;
-}
-
-/* ===== END TT32 SUPPORT ===== */
-
-
 document.getElementById("xmlFiles").addEventListener("change",e=>{
  document.getElementById("result").innerHTML="";
  [...e.target.files].forEach(f=>{
@@ -169,31 +109,10 @@ function parseXML(txt,name){
  const g=t=>xml.getElementsByTagName(t)[0]?.textContent.trim()||"";
  const c=(p,t)=>p?.getElementsByTagName(t)[0]?.textContent.trim()||"";
 
- const KHMSHDon_TT78=g("KHMSHDon"),KHHDon_TT78=g("KHHDon"),SHDon_TT78=g("SHDon");
- // const SHDonV=SHDon_TT78.replace(/^0+/,"");
- const NLap_TT78=g("NLap"),MHSo=g("MHSo");
+ const KHMSHDon=g("KHMSHDon"),KHHDon=g("KHHDon"),SHDon=g("SHDon");
+ const SHDonV=SHDon.replace(/^0+/,"");
+ const NLap=g("NLap"),MHSo=g("MHSo");
  const MCCQT=g("MCCQT"),MTDTChieu=g("MTDTChieu"),TgTTTBSo=g("TgTTTBSo");
- 
- /* ===== TT32 FALLBACK ===== */
- // nếu TT78 không có thì đọc theo TT32 -> Gán TT32 fallback nếu TT78 rỗng
- const KHMSHDon_TT32 = getFirst(xml,["KHMSHDon","MSHDon","MauSo","mau_sovat","mauHDon","InvoicePattern","templateCode",
- "inv:templateCode","TemptCode","InvoiceForm"]);
- const KHHDon_TT32 = getFirst(xml,["KHHDon","Kyhieu","seri_vat","kyHieuHDon","SerialNo","invoiceSeries","inv:invoiceSeries",
- "Symbol", "InvoiceSerial"]);
- const SHDon_TT32 = getFirst(xml,["SHDon","SoHoaDon","so_hoadon","soHDon","InvoiceNo","invoiceNumber","InvoiceNumber",
- "inv:invoiceNumber"]);
- const NLap_TT32 = getFirst(xml,["TDLap","NgayHoaDon","ngay_hdon","ngayHDon","ArisingDate","invoiceDate","inv:invoiceIssuedDate",
- "DateofInvoice","InvoiceDate"]);
-
- const KHMSHDon  = KHMSHDon_TT78 || KHMSHDon_TT32;
- const KHMSHDonV = KHMSHDon.replace(/\//g, "");
- const KHHDon    = KHHDon_TT78   || KHHDon_TT32;
- const KHHDonV   = KHHDon.replace(/\//g, "");
- const SHDon     = SHDon_TT78    || SHDon_TT32;
- const SHDonV    = SHDon.replace(/^0+/,"");
- const NLap      = NLap_TT78     || NLap_TT32;
- /* ===== END TT32 FALLBACK ===== */
-
  let MSTTCGP = g("MSTTCGP");
  // Hóa đơn không có thẻ MSTTCGP thì đưa vào nhóm VNPT
  if (!MSTTCGP) {
@@ -201,14 +120,7 @@ function parseXML(txt,name){
  }
 
  const NBan=xml.querySelector("NDHDon > NBan");
- const TenNBan_TT78=c(NBan,"Ten"),MSTNBan_TT78=c(NBan,"MST");
-
-/* ===== TT32 MST FALLBACK ===== */
- const sellerInfo = getSellerInfoTT32(xml);
- const TenNBan = TenNBan_TT78 || sellerInfo.name; 
- const MSTNBan = MSTNBan_TT78 || sellerInfo.tax;
-/* ===== END TT32 MST FALLBACK ===== */
-
+ const TenNBan=c(NBan,"Ten"),MSTNBan=c(NBan,"MST");
  const TenNBanGoiNho = (typeof TENNBANGOINHO!=="undefined" && TENNBANGOINHO[MSTNBan])
  
  ? TENNBANGOINHO[MSTNBan]
@@ -237,15 +149,13 @@ function parseXML(txt,name){
 
  const DigestValue=xml.getElementsByTagName("DigestValue")[0]?.textContent.trim()||"";
 
- const formatDate = d => {
-  if (!d) return "";
-  const dt = new Date(d.includes("/") ? d.split("/").reverse().join("-") : d);
-  if (isNaN(dt)) return d;
-  const y = dt.getFullYear();
-  const m = String(dt.getMonth()+1).padStart(2,"0");
-  const day = String(dt.getDate()).padStart(2,"0");
-  return `${y}-${m}-${day}`;
-
+ const formatDate = d=>{
+  if(!d) return "";
+   const y=d.slice(0,4);
+   const m=d.slice(5,7);
+   const day=d.slice(8,10);
+ return `${y}-${m}-${day}`;
+  
 };
 
  let MaTCHdon=g("MaTC")||g("Fkey");
@@ -300,8 +210,8 @@ else if(MSTTCGP==="0100686209") { // Mobi
 else if(MSTTCGP==="0101300842") { // Thái Sơn
   add(`- Mã tra cứu: ${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`https://einvoice.vn/tra-cuu?MaDV=${MSTNBan}&MaNhanHoaDon=${MaTCHdon}`);add(`<br>`);
-  add(`- `);add(`https://tracuutvan.einvoice.com.vn/?MaDV=${MSTNBan}&matracuu=${MaTCHdon}`);add(`<br>`);
-  add(`- `);add(`${LinkTCHdon}/?MaDV=${MSTNBan}&matracuu=${MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://tracuutvan.einvoice.com.vn/?MaDV=${MSTNBan}&MaNhanHoaDon=${MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`${LinkTCHdon}/?MaDV=${MSTNBan}&MaNhanHoaDon=${MaTCHdon}`);add(`<br>`);
   }
 
 else if(MSTTCGP==="0105987432") { // Easy
@@ -603,7 +513,7 @@ Mã CQT: ${MCCQT}<br><br>
   html+=`<br>Không tồn tại mã tra cứu trong file XML`;
  }
 
- html+=`<br>Tên file: <span class="file-name">${formatDate(NLap)} ${MSTNBan} ${KHMSHDonV} ${KHHDonV} ${SHDonV} ${TenNBanGoiNho}</span>
+ html+=`<br>Tên file: <span class="file-name">${formatDate(NLap)} ${MSTNBan} ${KHMSHDon} ${KHHDon} ${SHDonV} ${TenNBanGoiNho}</span>
   <button class="copy-btn" onclick="copyText(this)">Copy</button>`;
  html+=`</div>`;
  document.getElementById("result").innerHTML+=html;
