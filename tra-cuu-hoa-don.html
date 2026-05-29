@@ -118,10 +118,10 @@ function getSellerInfoTT32(xml){
   ];
   const MSTNBan_TT32 = [
     "MST","NBMST","MaSoThueNguoiBan","ma_thue","MSTTinh","ComTaxCode","sellerTaxCode","inv:sellerTaxCode",
-    "Taxcode","SellerTaxCode","CompanyTaxCode"  ];
+    "Taxcode","SellerTaxCode","CompanyTaxCode","Tax_File_Number"  ];
   const TenNBan_TT32 = [
     "Ten","TenNguoiBan","don_vi","tenDVi","ComName","sellerLegalName","inv:sellerLegalName","CompanyName","SellerName",
-    "inv:SellerName","CustomerName"  ];
+    "inv:SellerName","CustomerName","Pr_Detail_Name"  ];
   let result = {
     tax: "",
     name: ""
@@ -177,13 +177,13 @@ function parseXML(txt,name){
  /* ===== TT32 FALLBACK ===== */
  // nếu TT78 không có thì đọc theo TT32 -> Gán TT32 fallback nếu TT78 rỗng
  const KHMSHDon_TT32 = getFirst(xml,["KHMSHDon","MSHDon","MauSo","mau_sovat","mauHDon","InvoicePattern","templateCode",
- "inv:templateCode","TemptCode","InvoiceForm"]);
+ "inv:templateCode","TemptCode","InvoiceForm","Prints_Id"]);
  const KHHDon_TT32 = getFirst(xml,["KHHDon","Kyhieu","seri_vat","kyHieuHDon","SerialNo","invoiceSeries","inv:invoiceSeries",
- "Symbol", "InvoiceSerial"]);
+ "Symbol", "InvoiceSerial","Vat_Tran_Serie" ]);
  const SHDon_TT32 = getFirst(xml,["SHDon","SoHoaDon","so_hoadon","soHDon","InvoiceNo","invoiceNumber","InvoiceNumber",
- "inv:invoiceNumber"]);
+ "inv:invoiceNumber","Vat_Tran_No" ]);
  const NLap_TT32 = getFirst(xml,["TDLap","NgayHoaDon","ngay_hdon","ngayHDon","ArisingDate","invoiceDate","invoiceIssuedDate",
- "inv:invoiceIssuedDate","DateofInvoice","InvoiceDate"]);
+ "inv:invoiceIssuedDate","DateofInvoice","InvoiceDate","Vat_Tran_Date"]);
 
  const KHMSHDon  = KHMSHDon_TT78 || KHMSHDon_TT32;
  const KHMSHDonV = KHMSHDon.replace(/\//g, "");
