@@ -1,4 +1,6 @@
 ﻿const TENNBANGOINHO = {
+"0314242754":"M-K",
+"0313761884":"Tanico",
 "0306013246":"Minh Toi",
 "0315220270":"Minh Nhat",
 "0100110768-061":"Pjico Dong Sai Gon",
