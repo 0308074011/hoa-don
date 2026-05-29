@@ -182,8 +182,8 @@ function parseXML(txt,name){
  "Symbol", "InvoiceSerial"]);
  const SHDon_TT32 = getFirst(xml,["SHDon","SoHoaDon","so_hoadon","soHDon","InvoiceNo","invoiceNumber","InvoiceNumber",
  "inv:invoiceNumber"]);
- const NLap_TT32 = getFirst(xml,["TDLap","NgayHoaDon","ngay_hdon","ngayHDon","ArisingDate","invoiceDate","inv:invoiceIssuedDate",
- "DateofInvoice","InvoiceDate"]);
+ const NLap_TT32 = getFirst(xml,["TDLap","NgayHoaDon","ngay_hdon","ngayHDon","ArisingDate","invoiceDate","invoiceIssuedDate",
+ "inv:invoiceIssuedDate","DateofInvoice","InvoiceDate"]);
 
  const KHMSHDon  = KHMSHDon_TT78 || KHMSHDon_TT32;
  const KHMSHDonV = KHMSHDon.replace(/\//g, "");
