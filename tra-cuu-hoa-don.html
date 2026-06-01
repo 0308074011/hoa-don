@@ -118,10 +118,10 @@ function getSellerInfoTT32(xml){
   ];
   const MSTNBan_TT32 = [
     "MST","NBMST","MaSoThueNguoiBan","ma_thue","MSTTinh","ComTaxCode","sellerTaxCode","inv:sellerTaxCode",
-    "Taxcode","SellerTaxCode","CompanyTaxCode","Tax_File_Number"  ];
+    "Taxcode","SellerTaxCode","CompanyTaxCode","Tax_File_Number","sellerVATID"  ];
   const TenNBan_TT32 = [
     "Ten","TenNguoiBan","don_vi","tenDVi","ComName","sellerLegalName","inv:sellerLegalName","CompanyName","SellerName",
-    "inv:SellerName","CustomerName","Pr_Detail_Name"  ];
+    "inv:SellerName","CustomerName","Pr_Detail_Name","sellerCompanyName"  ];
   let result = {
     tax: "",
     name: ""
@@ -180,7 +180,7 @@ function parseXML(txt,name){
  "inv:templateCode","TemptCode","InvoiceForm","Prints_Id"]);
  const KHHDon_TT32 = getFirst(xml,["KHHDon","Kyhieu","seri_vat","kyHieuHDon","SerialNo","invoiceSeries","inv:invoiceSeries",
  "Symbol", "InvoiceSerial","Vat_Tran_Serie" ]);
- const SHDon_TT32 = getFirst(xml,["SHDon","SoHoaDon","so_hoadon","soHDon","InvoiceNo","invoiceNumber","InvoiceNumber",
+ const SHDon_TT32 = getFirst(xml,["SHDon","SoHoaDon","so_hoadon","soHDon","InvoiceNo","invoiceNo","invoiceNumber","InvoiceNumber",
  "inv:invoiceNumber","Vat_Tran_No" ]);
  const NLap_TT32 = getFirst(xml,["TDLap","NgayHoaDon","ngay_hdon","ngayHDon","ArisingDate","invoiceDate","invoiceIssuedDate",
  "inv:invoiceIssuedDate","DateofInvoice","InvoiceDate","Vat_Tran_Date"]);
