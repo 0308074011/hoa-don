@@ -152,6 +152,19 @@ function getSellerInfoTT32(xml){
   return result;
 }
 
+function getCDATA(xml, tagName) {
+  const nodes = xml.getElementsByTagName("inv:userDefines");
+  if (!nodes.length) return "";
+
+  const text = nodes[0].textContent || "";
+
+  const match = text.match(
+    new RegExp(`<${tagName}>\\s*([^<]+)\\s*<\\/${tagName}>`, "i")
+  );
+
+  return match ? match[1].trim() : "";
+}
+
 /* ===== END TT32 SUPPORT ===== */
 
 
@@ -248,7 +261,15 @@ function parseXML(txt,name){
 
 };
 
- let MaTCHdon=g("MaTC")||g("Fkey");
+ let MaTCHdon=g("MaTC")||g("Fkey")||getCDATA(xml, "TransactionID");
+
+ if (!MaTCHdon) { // fallback TT32 nếu TT78 không có kết quả
+    MaTCHdon = getFirst(xml, ["sobaomat","SoBaoMat","SOBAOMAT", "invoice_id","InvoiceId","InvoiceID",
+    "Key","key", "publicCode","PublicCode", "TransactionID","TransactionId","transactionId",
+    "InvoiceCode","Invoicecode","invoiceCode"
+    ]);
+ }
+
  let LinkTCHdon=g("Link")||g("LinkTC");
 
  xml.querySelectorAll("TTin").forEach(t=>{
@@ -283,7 +304,7 @@ else if (MSTTCGP === "VNPT_BACK" ||["0100684378","0108212803"].includes(MSTTCGP)
     const sub = (typeof VNPT_SUBDOMAIN !== "undefined" && VNPT_SUBDOMAIN[MSTNBan])
       ? VNPT_SUBDOMAIN[MSTNBan]
       : MSTNBan;
-    add(`- Mã tra cứu: ${MCCQT}`);add(`<br>`);
+    add(`- Mã tra cứu: ${MaTCHdon || MCCQT}`);add(`<br>`);
     add(`- `);add(`https://${sub}-tt78.vnpt-invoice.com.vn?strFkey=${MCCQT}`);add(`<br>`);
   }
 } 
