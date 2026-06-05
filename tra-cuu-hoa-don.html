@@ -165,6 +165,82 @@ function getCDATA(xml, tagName) {
   return match ? match[1].trim() : "";
 }
 
+function detectProviderByContent(xml, rawText){
+
+  const g = t =>
+    xml.getElementsByTagName(t)[0]?.textContent?.trim() || "";
+
+  const systemCode = g("inv:systemCode") || g("systemCode");
+
+  if(systemCode === "LHD_MISA"){ // MISA
+    return "0101243150";
+  }
+
+  if(g("chungTuLienQuan") || g("ChungTuLienQuan")){ // TGDD
+    return "0306731335";
+  }
+
+  if(systemCode === "LHD_EFY"){ // EFY
+    return "0102519041";
+  }
+
+  if(g("inv:invoiceAppRecordId") || g("inv:invoiceAppRecordID")){ // BKAV
+    return "0101360697";
+  }
+
+  const txt = rawText.toLowerCase();
+
+  if(txt.includes("meinvoice.vn")){ // MISA
+   return "0101243150";
+  }
+
+  if(txt.includes("ehoadon.vn")){ // BKAV
+   return "0101360697";
+  }
+
+  if(txt.includes("vnpt-invoice.com.vn")){ // VNPT
+    return "0100684378";
+  }
+
+  if(txt.includes("sinvoice.viettel.vn") ||txt.includes("vinvoice.viettel.vn")){ // Viettel
+   return "0100109106";
+  }
+
+  if(txt.includes("einvoice.fast.com.vn")){ // FAST
+   return "0100727825";
+  }
+
+  if(txt.includes("easyinvoice.vn")){ // EASY
+    return "0105987432";
+  }
+
+  if(txt.includes("einvoice.vn") ||txt.includes("einvoice.com.vn")){ // THÁI SƠN
+    return "0101300842";
+  }
+
+  if(txt.includes("ihoadon.vn")){ EFY
+   return "0102519041";
+  }
+
+  if(txt.includes("xuathoadon.vn")){ // TS24
+   return "0309478306";
+  }
+
+  if(txt.includes("minvoice.com.vn")){ // Minvoice
+   return "0106026495";
+  }
+
+  if(txt.includes("cinvoice.vn")){ // CMC
+   return "0101925883";
+  }
+
+  if(txt.includes("smartvas.vn")){ // SMARTSIGN
+    return "0309612872";
+  }
+
+  return "";
+}
+
 /* ===== END TT32 SUPPORT ===== */
 
 
@@ -208,8 +284,11 @@ function parseXML(txt,name){
  /* ===== END TT32 FALLBACK ===== */
 
  let MSTTCGP = g("MSTTCGP");
- // Hóa đơn không có thẻ MSTTCGP thì đưa vào nhóm VNPT
- if (!MSTTCGP) {
+ if(!MSTTCGP){
+  MSTTCGP = detectProviderByContent(xml, txt);
+ }
+
+ if (!MSTTCGP) { // Hóa đơn không có thẻ MSTTCGP thì đưa vào nhóm VNPT
   MSTTCGP = "VNPT_BACK";
  }
 
@@ -266,7 +345,7 @@ function parseXML(txt,name){
  if (!MaTCHdon) { // fallback TT32 nếu TT78 không có kết quả
     MaTCHdon = getFirst(xml, ["sobaomat","SoBaoMat","SOBAOMAT", "invoice_id","InvoiceId","InvoiceID",
     "Key","key", "publicCode","PublicCode", "TransactionID","TransactionId","transactionId",
-    "InvoiceCode","Invoicecode","invoiceCode","chungTuLienQuan"
+    "InvoiceCode","Invoicecode","invoiceCode","chungTuLienQuan","inv:invoiceAppRecordId"
     ]);
  }
 
@@ -283,14 +362,14 @@ function parseXML(txt,name){
  const add=l=>links.push(l);
 
 if (MSTTCGP === "0101243150") { // Misa
-  add(`- Mã tra cứu: ${IDHDon1}`);add(`<br>`);
-  add(`- `);add(`https://www.meinvoice.vn/tra-cuu/?sc=${IDHDon1}`);add(`<br>`);
-  add(`- `);add(`https://www.meinvoice.vn/tra-cuu/DownloadHandler.ashx?Type=pdf&Code=${IDHDon1}`);add(`<br>`);
-  add(`- `);add(`https://www.meinvoice.vn/tra-cuu/DownloadHandler.ashx?Type=xml&Code=${IDHDon1}`);add(`<br>`);
+  add(`- Mã tra cứu: ${IDHDon1 || MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://www.meinvoice.vn/tra-cuu/?sc=${IDHDon1 || MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://www.meinvoice.vn/tra-cuu/DownloadHandler.ashx?Type=pdf&Code=${IDHDon1 || MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://www.meinvoice.vn/tra-cuu/DownloadHandler.ashx?Type=xml&Code=${IDHDon1 || MaTCHdon}`);add(`<br>`);
 } 
 
 else if (MSTTCGP === "0101360697") { // BKAV
-  add(`- `);add(`https://van.ehoadon.vn/Lookup?InvoiceGUID=${IDHDon1}`);add(`<br>`);
+  add(`- `);add(`https://van.ehoadon.vn/Lookup?InvoiceGUID=${IDHDon1 || MaTCHdon}`);add(`<br>`);
 } 
 
 else if (MSTTCGP === "VNPT_BACK" ||["0100684378","0108212803"].includes(MSTTCGP)) { // VNPT
@@ -408,6 +487,7 @@ else if(MSTTCGP==="0310768095") { // AVSE
 else if(MSTTCGP==="0309612872") { // Smartsign
   add(`- Mã tra cứu: ${MaTCHdon}`);add(`<br>`);
   add(`- `);add(`https://tracuuhd.smartsign.com.vn/HDDT/?code=${MaTCHdon}`);add(`<br>`);
+  add(`- `);add(`https://tracuu.smartvas.vn/NEWHDDT/?code=${MaTCHdon}`);add(`<br>`);
   }
 
 else if(MSTTCGP==="0309478306") { // TS24
